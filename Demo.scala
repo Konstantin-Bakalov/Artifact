@@ -13,14 +13,13 @@ object Demo {
 
     def set(value: T) = new LWWReg(id = this.id, state = State(peer = id, timestamp = state.timestamp + 1, value = value))
 
-    def merge(foreignState: State[T]): LWWReg[T] = {
+    def merge(foreignState: State[T]): LWWReg[T] =
       val foreignPeer = foreignState.peer;
       val foreignTimestamp = foreignState.timestamp
       val localPeer = state.peer
       val localTimestamp = state.timestamp
 
       if localTimestamp <= foreignTimestamp || localPeer > foreignPeer then new LWWReg(id, foreignState) else this
-    }
 
   def main(args: Array[String]): Unit = {
     var alice = new LWWReg("alice", State("alice", 1, "foo"))
@@ -32,10 +31,9 @@ object Demo {
     alice = alice.merge(bob.state) // State("bob", 3, "bar!?")
     assert(alice.state.value.equals("bar!?"))
     alice = alice.set("milk")
-    alice = alice.set(alice.value + " " + "and eggs") // State("alice", 5, "mild and eggs")
+    alice = alice.set(alice.value + " " + "and eggs") // State("alice", 5, "milk and eggs")
     bob = bob.set("peppers") // State("bob", 4, "peppers")
-    bob = bob.set(bob.value + " " + "and tea") // State("bob", 5, "peppers and tea")
-    alice = alice.merge(bob.state) // State("bob", 5, "peppers and tea")
-    assert(alice.state.value.equals("peppers and tea"))
+    alice = alice.merge(bob.state) // State("alice", 5, "milk and eggs")
+    assert(alice.state.value.equals("milk and eggs"))
   }
 }
