@@ -1,7 +1,7 @@
 # Setup
 
-### Using Docker
-
+### Using Docker (recommended)
+- Install docker if not already installed
 - Navigate to `Dockerfile`
 - Run `docker build . -t artifact`
 - Optionally run `docker images` and make sure the image was created
