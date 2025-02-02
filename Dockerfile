@@ -6,5 +6,5 @@ RUN apt-get update && \
     apt-get install -y scala
 
 RUN scalac Artifact.scala
-# Run the Scala program
+
 CMD ["scala", "Artifact"]
